@@ -28,8 +28,6 @@ public class ViewController {
     @GetMapping("/index")
     public String toIndex(@CookieValue(required = false,value = "TOKEN") Cookie cookie, HttpSession session){
 
-
-
         if(cookie!=null){
             String token =cookie.getValue();
             if(!StringUtils.isEmpty(token)){

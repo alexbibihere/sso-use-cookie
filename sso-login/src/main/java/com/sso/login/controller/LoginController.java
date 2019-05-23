@@ -71,15 +71,29 @@ public class LoginController {
     }
 
 
+    /**
+     * 删除Cookie时，只设置maxAge=0将不能够从浏览器中删除cookie,
+     * 因为一个Cookie应当属于一个path与domain，所以删除时，Cookie的这两个属性也必须设置。
+     *
+     * 误区:刚开始时，我没有发现客户端发送到服务器端的cookie的path与domain值为空这个问题。
+     * 因为在登陆系统时，我设置了Cookie的path与domain属性的值,就误认为每次客户端请求时，都会把Cookie的
+     * 这两个属性也提交到服务器端，但系统并没有把path与domain提交到服务器端(提交过来的只有Cookie的key，value值)。
+     */
     @GetMapping("/logout")
-    public String logout(HttpServletResponse response
-    ,@CookieValue(required = true,value = "TOKEN") Cookie cookie
+    public String logout(HttpServletRequest request, HttpServletResponse response
     ){
-//        Cookie cookie = new Cookie("user","username");
-       if(cookie!=null){
+
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie:cookies){
+        if(cookie!=null && "TOKEN".equals(cookie.getName())){
+            //在删除cookie时，只设置maxAge=0不能够从浏览器中删除cookie
+            //因为一个Cookie应该属于一个path和domain，所以删除时，Cookie的这两个值也必须设置。
+
            cookie.setMaxAge(0);
+           cookie.setDomain("codeshop.com");
+           cookie.setPath("/"); //设置为‘/’ 都可以访问
            response.addCookie(cookie);
-       }
-        return "redirect:http://www.codeshop.com:9010/view/index";
+       }}
+        return "redirect:http://login.codeshop.com:9000/view/login";
     }
 }

@@ -4,26 +4,12 @@
     <meta charset="UTF-8">
     <title>首页</title>
 </head>
-<script src ="js/jquery.cookie.js"></script>
-<script type="text/javascript">
-function clearCookie(){
-alert('1')
 
-    var documentKeys = document.cookie.match(/{^+:}+(?+|+)?g);
-    if(documentKeys){
-        for(var i=0;i<documentKeys.length;i++){
-        document.cookie= documentKeys[i]+ '=0;
-        }
-    }
-}
-
-</script>
 <body>
     <h1>欢迎来到Code Shop</h1>
     <span>
     <a th:if="${session.loginUser == null}" href="http://login.codeshop.com:9000/view/login?target=http://www.codeshop.com:9010/view/index">登录</a>
 
-        <button onclick="clearCookie()">清楚cookie</button>
         <a th:unless="${session.loginUser ==null}" href="http://login.codeshop.com:9000/login/logout">退出</a>
         </span>
 
